@@ -4,17 +4,19 @@ import { api } from "@/trpc/react";
 import { getUData, useUser } from "@/app/_components/userDataProvider";
 import { Loading } from "@/app/_components/loading";
 import { Bookshelf } from "@/app/_components/bookshelf";
+import { use } from "react";
 
 export default function BookshelfPage({
   params,
 }: {
-  params: { nick: string };
+  params: Promise<{ nick: string }>;
 }) {
   const user = useUser();
   const router = useRouter();
   const logout = api.users.logout.useMutation();
+  const { nick } = use(params);
   const userid = api.users.findUser.useQuery({
-    nick: decodeURIComponent(params.nick),
+    nick: decodeURIComponent(nick),
   });
 
   if (user === null) return <Loading />;
@@ -42,7 +44,7 @@ export default function BookshelfPage({
       {userid.data ? (
         <Bookshelf userid={userid.data.id} token={userdata.token} />
       ) : (
-        `Użytkownik o nazwie ${params.nick} nie istnieje!`
+        `Użytkownik o nazwie ${nick} nie istnieje!`
       )}
     </div>
   );

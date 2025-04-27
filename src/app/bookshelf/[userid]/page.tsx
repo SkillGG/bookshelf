@@ -4,14 +4,16 @@ import { api } from "@/trpc/react";
 import { getUData, useUser } from "@/app/_components/userDataProvider";
 import { Loading } from "@/app/_components/loading";
 import { Bookshelf } from "@/app/_components/bookshelf";
+import { use } from "react";
 
 export default function BookshelfPage({
   params,
 }: {
-  params: { userid: string };
+  params: Promise<{ userid: string }>;
 }) {
   const user = useUser();
   const router = useRouter();
+  const { userid } = use(params);
   const logout = api.users.logout.useMutation();
 
   if (user === null) return <Loading />;
@@ -36,7 +38,7 @@ export default function BookshelfPage({
           Wyloguj
         </button>
       </div>
-      <Bookshelf userid={params.userid} token={userdata.token} />
+      <Bookshelf userid={userid} token={userdata.token} />
     </div>
   );
 }
