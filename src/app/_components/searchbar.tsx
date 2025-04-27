@@ -1,5 +1,6 @@
 import { api } from "@/trpc/react";
 import { useEffect, useState } from "react";
+import { Book } from "./book";
 
 type Result = {
   text: string;
@@ -8,8 +9,6 @@ type Result = {
 
 export const Searchbar = () => {
   const [search, setSearch] = useState("");
-
-  const [results, setResults] = useState<Result[]>([]);
 
   const searchQuery = api.books.search.useQuery(search, {
     enabled: search.length > 2,
@@ -35,11 +34,10 @@ export const Searchbar = () => {
             className="absolute flex min-w-[50%] flex-col border-2 bg-white"
             style={{ display: search.length <= 2 ? "none" : "block" }}
           >
-            {results.map((q) => (
-              <button className="block" key={q.id}>
-                {q.text}
-              </button>
-            ))}
+            {searchQuery.isFetched &&
+              searchQuery.data?.map((book) => {
+                return <Book key={book.id} book={book} lendable={false} />;
+              })}
           </div>
         </div>
       </div>
