@@ -6,10 +6,6 @@ import { api } from "@/trpc/react";
 import Link from "next/link";
 import { Loading } from "../_components/loading";
 
-interface LoginProps {
-  none: never;
-}
-
 const LoggedIn = ({ data }: { data: UData }) => {
   return <>Logged in as: {data.nick}</>;
 };
@@ -153,7 +149,7 @@ const RegisterPage = () => {
     </>
   );
 };
-const Register: FC<LoginProps> = () => {
+const Register = () => {
   const user = useUser();
   if (user === null) return <Loading />;
   const uData = getUData(user);
