@@ -13,10 +13,6 @@ import { api } from "@/trpc/react";
 import Link from "next/link";
 import { Loading } from "../_components/loading";
 
-interface LoginProps {
-  none: never;
-}
-
 const LoggedIn = ({ data }: { data: UData }) => {
   const router = useRouter();
   const params = useSearchParams();
@@ -95,7 +91,7 @@ const LoginPage = ({ login }: { login: LoginFN }) => {
     </>
   );
 };
-const Login: FC<LoginProps> = () => {
+const Login = () => {
   const user = useUser();
 
   if (!user) return <Loading />;
